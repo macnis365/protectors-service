@@ -1,9 +1,13 @@
 pipeline {
-    agent any
-    tools {
-        maven 'M3'
-    }
+    agent { docker { image 'maven:3.3.3' } }
     stages {
+        stage('build') {
+            steps {
+                sh 'mvn --version'
+            }
+        }
+    }
+    /*stages {
         stage('Checkout'){
             steps{
                 checkout scm
@@ -14,5 +18,5 @@ pipeline {
                 sh 'mvn -B -DskipTests clean package'
             }
         }
-    }
+    }*/
 }
