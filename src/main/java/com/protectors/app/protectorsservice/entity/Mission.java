@@ -1,9 +1,6 @@
 package com.protectors.app.protectorsservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,9 +31,9 @@ public class Mission implements Serializable {
     private boolean isDeleted;
 
     @ManyToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
     @Getter
     @Setter
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+/*    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")*/
+    @JsonIgnore
     private Set<Superhero> superheroes = new HashSet<>();
 }
