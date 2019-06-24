@@ -15,4 +15,8 @@ public class MissionService {
     public Optional<Mission> findMission(Long id){
         return missionRepository.findById(id);
     }
+
+    public Mission saveOrUpdate(Mission mission){
+        return missionRepository.save(mission);
+    }
 }

@@ -51,7 +51,9 @@ public class Superhero implements Serializable {
 */
     @Getter
     @Setter
+/*
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+*/
 
     private Set<Mission> missions = new HashSet<>();
 
