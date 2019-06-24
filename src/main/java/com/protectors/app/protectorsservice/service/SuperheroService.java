@@ -11,7 +11,7 @@ public class SuperheroService {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    public Long createSuperhero(Superhero superhero) {
-        return superheroRepository.save(superhero).getId();
+    public Superhero createSuperhero(Superhero superhero) {
+        return superheroRepository.save(superhero);
     }
 }
