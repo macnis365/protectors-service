@@ -13,7 +13,7 @@ public class SuperheroService {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    public Superhero createSuperhero(Superhero superhero) {
+    public Superhero saveOrUpdateSuperhero(Superhero superhero) {
         return superheroRepository.save(superhero);
     }
 

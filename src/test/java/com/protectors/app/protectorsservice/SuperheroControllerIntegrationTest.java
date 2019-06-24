@@ -20,14 +20,10 @@ import java.util.Optional;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SuperheroController.class)
@@ -60,7 +56,7 @@ public class SuperheroControllerIntegrationTest {
         superhero.setFirstName("Clark");
         superhero.setLastName("Kent");
 
-        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(superhero);
+        given(superheroService.saveOrUpdateSuperhero(any(Superhero.class))).willReturn(superhero);
 
         mvc.perform(post("/superhero")
                 .content(objectMapper.writeValueAsString(superhero))

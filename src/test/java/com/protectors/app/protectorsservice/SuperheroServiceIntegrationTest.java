@@ -47,7 +47,7 @@ public class SuperheroServiceIntegrationTest {
     @Test
     public void whenValidName_thenEmployeeShouldBeFound() {
         String name = "alex";
-        Superhero found = superheroService.createSuperhero(superhero);
+        Superhero found = superheroService.saveOrUpdateSuperhero(superhero);
 
         assertThat(found.getFirstName())
                 .isEqualTo(superhero.getFirstName());
