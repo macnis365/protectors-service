@@ -19,16 +19,16 @@ public class SuperheroController {
     @ResponseStatus(HttpStatus.CREATED)
     public Superhero createSuperhero(@RequestBody Superhero superhero) {
         return superheroService.saveOrUpdateSuperhero(superhero);
-}
+    }
 
     @GetMapping("{id}")
-    public Superhero fetchSuperHero(@PathVariable final Long id) throws SuperheroNotFound {
-        return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound());
+    public Superhero fetchSuperHero(@PathVariable final Long id) {
+        return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound(id));
     }
 
     @PutMapping("{id}")
     public Superhero amendSuperHero(@RequestBody Superhero superhero, @PathVariable final Long id) throws InvalidOperation {
-        return superheroService.findSuperhero(id).map((Superhero newSuperhero) -> {
+        return superheroService.findSuperhero(id).filter(nonEmptySuperhero -> null != nonEmptySuperhero).map((Superhero newSuperhero) -> {
                     newSuperhero.setFirstName(superhero.getFirstName());
                     newSuperhero.setLastName(superhero.getLastName());
                     newSuperhero.setSuperheroName(superhero.getSuperheroName());

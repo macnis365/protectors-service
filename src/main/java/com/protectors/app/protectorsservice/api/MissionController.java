@@ -1,5 +1,6 @@
 package com.protectors.app.protectorsservice.api;
 
+import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.service.MissionService;
@@ -15,8 +16,8 @@ public class MissionController {
     private MissionService missionService;
 
     @GetMapping("{id}")
-    public Mission fetchSuperHero(@PathVariable final Long id) throws SuperheroNotFound {
-        return missionService.findMission(id).orElseThrow(() -> new SuperheroNotFound());
+    public Mission fetchSuperHero(@PathVariable final Long id) {
+        return missionService.findMission(id).orElseThrow(() -> new MissionNotFound(id));
     }
 
     @PostMapping()

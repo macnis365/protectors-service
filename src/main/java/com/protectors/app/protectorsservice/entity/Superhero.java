@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class Superhero implements Serializable {
 /*
     @Column(name = "SuperheroName")
 */
+    @NotEmpty(message = "superhero name must not be empty")
     private String superheroName;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
