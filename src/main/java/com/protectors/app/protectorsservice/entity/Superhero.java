@@ -1,6 +1,8 @@
 package com.protectors.app.protectorsservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,13 +42,17 @@ public class Superhero implements Serializable {
 */
     private String superheroName;
 
-   /* @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "superhero_missions",
             joinColumns = {@JoinColumn(name = "superhero_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "mission_id", referencedColumnName = "id")})
+/*
     @JsonManagedReference
+*/
     @Getter
     @Setter
-    private Set<Mission> missions = new HashSet<>();*/
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
+    private Set<Mission> missions = new HashSet<>();
 
 }
