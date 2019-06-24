@@ -33,7 +33,6 @@ public class Mission implements Serializable {
     @ManyToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Getter
     @Setter
-/*    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")*/
     @JsonIgnore
     private Set<Superhero> superheroes = new HashSet<>();
 }

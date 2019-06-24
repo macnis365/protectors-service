@@ -7,6 +7,7 @@ import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.service.SuperheroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,14 +30,21 @@ public class SuperheroController {
 
     @PutMapping("{id}")
     public Superhero amendSuperHero(@RequestBody Superhero superhero, @PathVariable final Long id) throws InvalidOperation {
-        if(null == superhero){
+        if (null == superhero) {
             throw new InvalidInputException();
         }
+        return superheroService.findSuperhero(id).map((Superhero newSuperhero) -> {
+                    if (!StringUtils.isEmpty(superhero.getFirstName())) {
+                        newSuperhero.setFirstName(superhero.getFirstName());
+                    }
 
-        return superheroService.findSuperhero(id).filter(nonEmptySuperhero -> null != nonEmptySuperhero).map((Superhero newSuperhero) -> {
-                    newSuperhero.setFirstName(superhero.getFirstName());
-                    newSuperhero.setLastName(superhero.getLastName());
-                    newSuperhero.setSuperheroName(superhero.getSuperheroName());
+                    if (!StringUtils.isEmpty(superhero.getLastName())) {
+                        newSuperhero.setLastName(superhero.getLastName());
+                    }
+
+                    if (!StringUtils.isEmpty(superhero.getSuperheroName())) {
+                        newSuperhero.setSuperheroName(superhero.getSuperheroName());
+                    }
                     return superheroService.saveOrUpdateSuperhero(newSuperhero);
                 }
         ).orElseThrow(() -> new InvalidOperation());
