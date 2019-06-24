@@ -1,7 +1,9 @@
 package com.protectors.app.protectorsservice.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +14,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "superhero")
+@ToString
+@EqualsAndHashCode
 public class Superhero implements Serializable {
 
     @Id
