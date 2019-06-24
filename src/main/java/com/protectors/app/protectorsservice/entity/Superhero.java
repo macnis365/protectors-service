@@ -17,12 +17,12 @@ public class Superhero {
 
     @Getter
     @Setter
-    @Column(name = "Firstname")
+    @Column(name = "FirstName")
     private String firstName;
 
     @Getter
     @Setter
-    @Column(name = "Lastname")
+    @Column(name = "LastName")
     private String lastName;
 
     @Getter
