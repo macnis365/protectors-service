@@ -1,5 +1,6 @@
 package com.protectors.app.protectorsservice.api;
 
+import com.protectors.app.protectorsservice.customexception.InvalidInputException;
 import com.protectors.app.protectorsservice.customexception.InvalidOperation;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Superhero;
@@ -28,6 +29,10 @@ public class SuperheroController {
 
     @PutMapping("{id}")
     public Superhero amendSuperHero(@RequestBody Superhero superhero, @PathVariable final Long id) throws InvalidOperation {
+        if(null == superhero){
+            throw new InvalidInputException();
+        }
+
         return superheroService.findSuperhero(id).filter(nonEmptySuperhero -> null != nonEmptySuperhero).map((Superhero newSuperhero) -> {
                     newSuperhero.setFirstName(superhero.getFirstName());
                     newSuperhero.setLastName(superhero.getLastName());
