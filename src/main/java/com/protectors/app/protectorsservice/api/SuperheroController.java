@@ -1,5 +1,6 @@
 package com.protectors.app.protectorsservice.api;
 
+import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.service.SuperheroService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +18,10 @@ public class SuperheroController {
     @ResponseStatus(HttpStatus.CREATED)
     public Superhero createSuperhero(final Superhero superhero) {
         return superheroService.createSuperhero(superhero);
+    }
+
+    @GetMapping("{id}")
+    public Superhero fetchSuperHero(@PathVariable final Long id) throws SuperheroNotFound {
+        return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound());
     }
 }
