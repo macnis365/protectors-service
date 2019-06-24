@@ -30,7 +30,9 @@ public class Mission implements Serializable {
     @Setter
     private boolean isDeleted;
 
-    @OneToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    /*@OneToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonBackReference
-    private Set<Superhero> superheroes = new HashSet<>();
+    @Getter
+    @Setter
+    private Set<Superhero> superheroes = new HashSet<>();*/
 }

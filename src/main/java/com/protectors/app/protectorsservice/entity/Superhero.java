@@ -40,11 +40,13 @@ public class Superhero implements Serializable {
 */
     private String superheroName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   /* @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "superhero_missions",
             joinColumns = {@JoinColumn(name = "superhero_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "mission_id", referencedColumnName = "id")})
     @JsonManagedReference
-    private Set<Mission> missions = new HashSet<>();
+    @Getter
+    @Setter
+    private Set<Mission> missions = new HashSet<>();*/
 
 }
