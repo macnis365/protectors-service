@@ -42,4 +42,29 @@ public class Mission implements Serializable {
     @Setter
     @JsonIgnore
     private Set<Superhero> superheroes = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mission)) return false;
+
+        Mission mission = (Mission) o;
+
+        return id != null ? id.equals(mission.id) : mission.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Mission{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isCompleted=" + isCompleted +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
 }

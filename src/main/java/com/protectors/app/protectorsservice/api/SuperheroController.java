@@ -38,15 +38,17 @@ public class SuperheroController {
                     superheroFromDatabase.setLastName(modifiedSuperhero.getLastName());
                     superheroFromDatabase.setSuperheroName(modifiedSuperhero.getSuperheroName());
                     if (!CollectionUtils.isEmpty(modifiedSuperhero.getMissions())) {
-                        Set<Mission> newMissions = CompareUtility.getMatchedMissionsFrom(modifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
-                        newMissions.stream().forEach(System.out::println);
+                        Set<Mission> oldMissions = CompareUtility.getMatchedMissionsFrom(modifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
+                        oldMissions.stream().forEach(System.out::println);
                         System.out.println("Matched missions above");
                         Set<Mission> unMatchedMissions = CompareUtility.getUnMatchedMissions(modifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
                         unMatchedMissions.stream().forEach(System.out::println);
                         System.out.println("UnMatched missions above");
-                        superheroFromDatabase.getMissions().addAll(newMissions);
+                        superheroFromDatabase.getMissions().addAll(oldMissions);
                         for (Mission mission : superheroFromDatabase.getMissions()) {
-                            superheroFromDatabase.getMissions().add(CompareUtility.amendMatchedMission(mission, modifiedSuperhero.getMissions()));
+                            Mission updateToDatabase = CompareUtility.amendMatchedMission(mission, unMatchedMissions);
+                            System.out.println("update to database " + updateToDatabase.toString());
+                            superheroFromDatabase.getMissions().add(updateToDatabase);
                         }
                     }
                     return superheroService.saveOrUpdateSuperhero(superheroFromDatabase);
