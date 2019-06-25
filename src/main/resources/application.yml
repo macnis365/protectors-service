@@ -1,5 +1,7 @@
 server:
   port: 8081
+  error:
+    include-stacktrace: on-trace-param
 
 spring:
   h2:

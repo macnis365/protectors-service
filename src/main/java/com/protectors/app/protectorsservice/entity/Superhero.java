@@ -34,7 +34,7 @@ public class Superhero implements Serializable {
     @Getter
     @Setter
     @NotEmpty(message = "superhero name must not be empty")
-    @NotNull()
+    @NotNull(message = "superhero name cannot not be null")
     private String superheroName;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

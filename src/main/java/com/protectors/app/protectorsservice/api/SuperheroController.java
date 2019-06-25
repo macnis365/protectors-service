@@ -1,7 +1,5 @@
 package com.protectors.app.protectorsservice.api;
 
-import com.protectors.app.protectorsservice.customexception.InvalidInputException;
-import com.protectors.app.protectorsservice.customexception.InvalidOperation;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.entity.Superhero;
@@ -10,11 +8,9 @@ import com.protectors.app.protectorsservice.utility.CompareUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashSet;
 import java.util.Set;
 
 @RestController
@@ -26,17 +22,17 @@ public class SuperheroController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Superhero createSuperhero(@RequestBody Superhero superhero) {
+    public Superhero createSuperhero(@Valid @RequestBody Superhero superhero) {
         return superheroService.saveOrUpdateSuperhero(superhero);
     }
 
     @GetMapping("{id}")
-    public Superhero fetchSuperHero(@Valid @PathVariable final Long id) {
+    public Superhero fetchSuperHero(@PathVariable final Long id) {
         return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound(id));
     }
 
     @PutMapping("{id}")
-    public Superhero amendSuperHero(@RequestBody Superhero modifiedSuperhero, @PathVariable final Long id) {
+    public Superhero amendSuperHero(@Valid @RequestBody Superhero modifiedSuperhero, @PathVariable final Long id) {
         return superheroService.findSuperhero(id).map((Superhero superheroFromDatabase) -> {
                     superheroFromDatabase.setFirstName(modifiedSuperhero.getFirstName());
                     superheroFromDatabase.setLastName(modifiedSuperhero.getLastName());

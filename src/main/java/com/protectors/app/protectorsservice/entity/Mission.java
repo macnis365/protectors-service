@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +25,8 @@ public class Mission implements Serializable {
 
     @Getter
     @Setter
+    @NotEmpty(message = "mission name must not be empty")
+    @NotNull(message = "mission name cannot not be null")
     private String name;
 
     @Getter
