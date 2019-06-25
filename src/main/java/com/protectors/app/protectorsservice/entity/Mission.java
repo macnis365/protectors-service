@@ -14,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table(name = "mission")
 @ToString
-@EqualsAndHashCode
 public class Mission implements Serializable {
     @Id
     @Getter
@@ -34,7 +33,7 @@ public class Mission implements Serializable {
     @Setter
     private boolean isDeleted;
 
-    @ManyToMany(mappedBy = "missions", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Getter
     @Setter
     @JsonIgnore
