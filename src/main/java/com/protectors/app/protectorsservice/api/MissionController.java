@@ -1,7 +1,6 @@
 package com.protectors.app.protectorsservice.api;
 
 import com.protectors.app.protectorsservice.customexception.MissionNotFound;
-import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +23,15 @@ public class MissionController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mission createMission(@RequestBody Mission mission) {
         return missionService.saveOrUpdate(mission);
+    }
+
+    @PutMapping("{id}")
+    public Mission amendMission(@RequestBody Mission mission, @PathVariable final Long id) {
+        return missionService.update(id, mission);
+    }
+
+    @DeleteMapping("{id}")
+    public Mission softDeleteMission(@PathVariable final Long id) {
+        return missionService.softDeleteMission(id);
     }
 }
