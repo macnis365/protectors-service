@@ -6,12 +6,14 @@ import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.service.SuperheroService;
+import com.protectors.app.protectorsservice.utility.CompareUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,66 +31,36 @@ public class SuperheroController {
     }
 
     @GetMapping("{id}")
-    public Superhero fetchSuperHero(@PathVariable final Long id) {
+    public Superhero fetchSuperHero(@Valid @PathVariable final Long id) {
         return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound(id));
     }
 
     @PutMapping("{id}")
-    public Superhero amendSuperHero(@RequestBody Superhero superhero, @PathVariable final Long id) throws InvalidOperation {
-        if (null == superhero) {
-            throw new InvalidInputException();
-        }
-        System.out.println(superhero.toString());
-
-        return superheroService.findSuperhero(id).map((Superhero newSuperhero) -> {
-
-                    if (!StringUtils.isEmpty(superhero.getFirstName())) {
-                        newSuperhero.setFirstName(superhero.getFirstName());
-                    }
-
-                    if (!StringUtils.isEmpty(superhero.getLastName())) {
-                        newSuperhero.setLastName(superhero.getLastName());
-                    }
-
-                    if (!StringUtils.isEmpty(superhero.getSuperheroName())) {
-                        newSuperhero.setSuperheroName(superhero.getSuperheroName());
-                    }
-
-                    Set<String> missionNamesInDatabase = new HashSet<>();
-                    for (Mission mission : newSuperhero.getMissions()) {
-                        missionNamesInDatabase.add(mission.getName());
-                    }
-
-                    if (!CollectionUtils.isEmpty(superhero.getMissions())) {
-                        for (Mission mission : superhero.getMissions()) {
-                            if (missionNamesInDatabase.contains(mission.getName())) {
-                                System.out.println(mission.toString());
-                            }
+    public Superhero amendSuperHero(@RequestBody Superhero modifiedSuperhero, @PathVariable final Long id) {
+        return superheroService.findSuperhero(id).map((Superhero superheroFromDatabase) -> {
+                    superheroFromDatabase.setFirstName(modifiedSuperhero.getFirstName());
+                    superheroFromDatabase.setLastName(modifiedSuperhero.getLastName());
+                    superheroFromDatabase.setSuperheroName(modifiedSuperhero.getSuperheroName());
+                    if (!CollectionUtils.isEmpty(modifiedSuperhero.getMissions())) {
+                        Set<Mission> newMissions = CompareUtility.getMatchedMissionsFrom(modifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
+                        newMissions.stream().forEach(System.out::println);
+                        System.out.println("Matched missions above");
+                        Set<Mission> unMatchedMissions = CompareUtility.getUnMatchedMissions(modifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
+                        unMatchedMissions.stream().forEach(System.out::println);
+                        System.out.println("UnMatched missions above");
+                        superheroFromDatabase.getMissions().addAll(newMissions);
+                        for (Mission mission : superheroFromDatabase.getMissions()) {
+                            superheroFromDatabase.getMissions().add(CompareUtility.amendMatchedMission(mission, modifiedSuperhero.getMissions()));
                         }
                     }
-
-
-/*                    if (!CollectionUtils.isEmpty(superhero.getMissions())) {
-                        if (!CollectionUtils.isEmpty(newSuperhero.getMissions())) {
-                            for (Mission mission : newSuperhero.getMissions()) {
-                                if (superhero.getMissions().contains(mission)) {
-//                              TO DO update missions details
-                                } else {
-//                              TO DO add new missions to superhero
-                                }
-                            }
-                        } else {
-//                            TO DO  add new missions to superhero
-
-                        }
-                    }*/
-
-                    return superheroService.saveOrUpdateSuperhero(newSuperhero);
+                    return superheroService.saveOrUpdateSuperhero(superheroFromDatabase);
                 }
-        ).
+        ).orElseThrow(() -> new SuperheroNotFound(id));
+    }
 
-                orElseThrow(() -> new
-
-                        InvalidOperation());
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteSuperhero(@PathVariable final Long id) {
+        superheroService.deleteSuperhero(id);
     }
 }
