@@ -28,27 +28,26 @@ public class CompareUtility {
                 missionToUpdate.setDeleted(mission.isDeleted());
                 missionToUpdate.setCompleted(mission.isCompleted());
             }
-            System.out.println("inside amend matched" + missionToUpdate);
         }
+        System.out.println(missionToUpdate);
         return missionToUpdate;
     }
 
     public static void updatePersistedMissions(Superhero userModifiedSuperhero, Superhero superheroFromDatabase) {
         if (!CollectionUtils.isEmpty(userModifiedSuperhero.getMissions())) {
-            Set<Mission> oldMissionsInUserModified = CompareUtility.getMatchedMissionsFrom(userModifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
+            Set<Mission> oldMissionsUserModified = CompareUtility.getMatchedMissionsFrom(userModifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
             Set<Mission> unMatchedMissions = CompareUtility.getUnMatchedMissions(userModifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
             superheroFromDatabase.getMissions().addAll(unMatchedMissions);
-            superheroFromDatabase.getMissions().removeAll(oldMissionsInUserModified);
-            oldMissionsInUserModified.stream().forEach(System.out::println);
-            Set<Mission> updatedMissions = findMissionsToUpdate(superheroFromDatabase, oldMissionsInUserModified);
+            Set<Mission> updatedMissions = findMissionsToUpdate(superheroFromDatabase, oldMissionsUserModified);
+            superheroFromDatabase.getMissions().removeAll(oldMissionsUserModified);
             superheroFromDatabase.getMissions().addAll(updatedMissions);
         }
     }
 
-    public static Set<Mission> findMissionsToUpdate(Superhero superheroFromDatabase, Set<Mission> oldMissionsInUserModified) {
+    public static Set<Mission> findMissionsToUpdate(Superhero superheroFromDatabase, Set<Mission> oldMissionsUserModified) {
         Set<Mission> updatedMissions = new HashSet<>();
         for (Mission mission : superheroFromDatabase.getMissions()) {
-            Mission updateToDatabase = CompareUtility.amendMatchedMission(mission, oldMissionsInUserModified);
+            Mission updateToDatabase = CompareUtility.amendMatchedMission(mission, oldMissionsUserModified);
             updatedMissions.add(updateToDatabase);
         }
         return updatedMissions;

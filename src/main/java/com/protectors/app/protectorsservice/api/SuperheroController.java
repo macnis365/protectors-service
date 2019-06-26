@@ -31,14 +31,14 @@ public class SuperheroController {
     @PutMapping("{id}")
     public Superhero amendSuperHero(@Valid @RequestBody Superhero userModifiedSuperhero, @PathVariable final Long id) {
         return superheroService.findSuperhero(id).map((Superhero superheroFromDatabase) -> {
-                    updatedPersistedSuperhero(userModifiedSuperhero, superheroFromDatabase);
+                    updatePersistedSuperhero(userModifiedSuperhero, superheroFromDatabase);
                     CompareUtility.updatePersistedMissions(userModifiedSuperhero, superheroFromDatabase);
                     return superheroService.saveOrUpdateSuperhero(superheroFromDatabase);
                 }
         ).orElseThrow(() -> new SuperheroNotFound(id));
     }
 
-    private void updatedPersistedSuperhero(Superhero userModifiedSuperhero, Superhero superheroFromDatabase) {
+    private void updatePersistedSuperhero(Superhero userModifiedSuperhero, Superhero superheroFromDatabase) {
         superheroFromDatabase.setFirstName(userModifiedSuperhero.getFirstName());
         superheroFromDatabase.setLastName(userModifiedSuperhero.getLastName());
         superheroFromDatabase.setSuperheroName(userModifiedSuperhero.getSuperheroName());
