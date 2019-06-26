@@ -1,0 +1,70 @@
+package com.protectors.app.protectorsservice.entity;
+
+import com.fasterxml.jackson.annotation.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "mission")
+@ToString
+public class Mission implements Serializable {
+    @Id
+    @Getter
+    @Setter
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Getter
+    @Setter
+    @NotEmpty(message = "mission name must not be empty")
+    @NotNull(message = "mission name cannot not be null")
+    private String name;
+
+    @Getter
+    @Setter
+    private boolean isCompleted;
+
+    @Getter
+    @Setter
+    private boolean isDeleted;
+
+    @ManyToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Getter
+    @Setter
+    @JsonIgnore
+    private Set<Superhero> superheroes = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Mission)) return false;
+
+        Mission mission = (Mission) o;
+
+        return id != null ? id.equals(mission.id) : mission.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Mission{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", isCompleted=" + isCompleted +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
+}
