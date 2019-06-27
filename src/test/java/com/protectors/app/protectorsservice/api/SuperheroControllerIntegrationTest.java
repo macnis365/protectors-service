@@ -1,7 +1,6 @@
-package com.protectors.app.protectorsservice;
+package com.protectors.app.protectorsservice.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.protectors.app.protectorsservice.api.SuperheroController;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.service.SuperheroService;
 import org.junit.Before;
@@ -47,7 +46,7 @@ public class SuperheroControllerIntegrationTest {
     }
 
     @Test
-    public void givenSuperhero_whenGetSuperhero_thenReturnJsonArray()
+    public void createSuperheroAndReturn201()
             throws Exception {
 
         Superhero superhero = new Superhero();
@@ -68,12 +67,32 @@ public class SuperheroControllerIntegrationTest {
     }
 
     @Test
-    public void find_superheroByIdNotFound_404() throws Exception {
+    public void createSuperheroWithoutSuperheroNameAndReturn400()
+            throws Exception {
+
+        Superhero superhero = new Superhero();
+        superhero.setId(1L);
+        superhero.setSuperheroName("");
+        superhero.setFirstName("Clark");
+        superhero.setLastName("Kent");
+
+        given(superheroService.saveOrUpdateSuperhero(any(Superhero.class))).willReturn(superhero);
+
+        mvc.perform(post("/superhero")
+                .content(objectMapper.writeValueAsString(superhero))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
+
+    @Test
+    public void findSuperheroByIdNotFound404() throws Exception {
         mvc.perform(get("/superhero/5")).andExpect(status().isNotFound());
     }
 
     @Test
-    public void find_a_superhero_OK() throws Exception {
+    public void findASuperheroWhichExistOK() throws Exception {
 
         mvc.perform(get("/superhero/1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))

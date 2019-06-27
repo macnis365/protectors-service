@@ -24,12 +24,12 @@ public class SuperheroController {
     }
 
     @GetMapping("{id}")
-    public Superhero fetchSuperHero(@PathVariable final Long id) {
+    public Superhero fetchSuperhero(@PathVariable final Long id) {
         return superheroService.findSuperhero(id).orElseThrow(() -> new SuperheroNotFound(id));
     }
 
     @PutMapping("{id}")
-    public Superhero amendSuperHero(@Valid @RequestBody Superhero userModifiedSuperhero, @PathVariable final Long id) {
+    public Superhero amendSuperhero(@Valid @RequestBody Superhero userModifiedSuperhero, @PathVariable final Long id) {
         return superheroService.findSuperhero(id).map((Superhero superheroFromDatabase) -> {
                     updatePersistedSuperhero(userModifiedSuperhero, superheroFromDatabase);
                     CompareUtility.updatePersistedMissions(userModifiedSuperhero, superheroFromDatabase);

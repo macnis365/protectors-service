@@ -1,4 +1,4 @@
-package com.protectors.app.protectorsservice;
+package com.protectors.app.protectorsservice.service;
 
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.repository.SuperheroRepository;
