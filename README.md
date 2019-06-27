@@ -19,4 +19,5 @@ docker cmd to run the image(expose-port:internal-port)
 
 
 build docker image via maven cmd
+
 ./mvnw install dockerfile:build
