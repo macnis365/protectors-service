@@ -1,7 +1,7 @@
 package com.protectors.app.protectorsservice.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.protectors.app.protectorsservice.customexception.CompletedMissionCannotDelete;
+import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotDelete;
 import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.service.MissionService;
@@ -125,7 +125,7 @@ public class MissionControllerIntegrationTest {
         mission.setName("godspeed");
         mission.setCompleted(true);
         mission.setDeleted(true);
-        when(missionService.update(anyLong(), any(Mission.class))).thenThrow(new CompletedMissionCannotDelete(2L));
+        when(missionService.update(anyLong(), any(Mission.class))).thenThrow(new ActiveMissionCannotDelete(2L));
 
         mvc.perform(put("/mission/2", mission)
                 .content(objectMapper.writeValueAsString(mission))

@@ -1,6 +1,6 @@
 package com.protectors.app.protectorsservice.service;
 
-import com.protectors.app.protectorsservice.customexception.CompletedMissionCannotDelete;
+import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotDelete;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.entity.Superhero;
@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,7 +49,7 @@ public class SuperheroServiceIntegrationTest {
         Mission mission = new Mission();
         mission.setName("superhero mission");
         mission.setCompleted(true);
-        mission.setDeleted(true);
+        mission.setDeleted(false);
         superhero.getMissions().add(mission);
 
         Mockito.when(superheroRepository.save(superhero))
@@ -69,7 +68,7 @@ public class SuperheroServiceIntegrationTest {
         assertThat(createdHero.getMissions().size()).isEqualTo(superhero.getMissions().size());
     }
 
-    @Test(expected = CompletedMissionCannotDelete.class)
+    @Test(expected = ActiveMissionCannotDelete.class)
     public void saveSuperheroName() {
         Mission mission = new Mission();
         mission.setId(1L);

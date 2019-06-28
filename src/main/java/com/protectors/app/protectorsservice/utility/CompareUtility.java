@@ -1,6 +1,6 @@
 package com.protectors.app.protectorsservice.utility;
 
-import com.protectors.app.protectorsservice.customexception.CompletedMissionCannotDelete;
+import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotDelete;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import org.springframework.util.CollectionUtils;
@@ -33,7 +33,7 @@ public class CompareUtility {
 
     public static void validateActiveMission(Mission mission) {
         if (Boolean.FALSE.equals(mission.isCompleted()) && Boolean.TRUE.equals(mission.isDeleted())) {
-            throw new CompletedMissionCannotDelete(mission.getId());
+            throw new ActiveMissionCannotDelete(mission.getId());
         }
     }
 

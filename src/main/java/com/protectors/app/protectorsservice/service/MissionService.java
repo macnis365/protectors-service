@@ -1,9 +1,10 @@
 package com.protectors.app.protectorsservice.service;
 
-import com.protectors.app.protectorsservice.customexception.CompletedMissionCannotDelete;
+import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotDelete;
 import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.repository.MissionRepository;
+import com.protectors.app.protectorsservice.utility.CompareUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,14 @@ public class MissionService {
     }
 
     public Mission createMission(Mission mission) {
+        CompareUtility.validateActiveMission(mission);
         return missionRepository.save(mission);
     }
 
     public Mission update(Long id, Mission mission) {
         Mission missionFromDatabase = missionRepository.findById(id).orElseThrow(() -> new MissionNotFound(id));
         if (Boolean.TRUE.equals(mission.isCompleted() && Boolean.TRUE.equals(mission.isDeleted()))) {
-            throw new CompletedMissionCannotDelete(id);
+            throw new ActiveMissionCannotDelete(id);
         }
 
         missionFromDatabase.setName(mission.getName());
@@ -35,9 +37,7 @@ public class MissionService {
 
     public Mission softDeleteMission(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new MissionNotFound(id));
-        if (Boolean.TRUE.equals(mission.isCompleted())) {
-            throw new CompletedMissionCannotDelete(id);
-        }
+        CompareUtility.validateActiveMission(mission);
         mission.setDeleted(Boolean.TRUE);
         return missionRepository.save(mission);
     }
