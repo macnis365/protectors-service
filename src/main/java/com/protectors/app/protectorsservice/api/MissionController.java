@@ -1,6 +1,5 @@
 package com.protectors.app.protectorsservice.api;
 
-import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.service.MissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class MissionController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Mission createMission(@Valid @RequestBody Mission mission) {
-        return missionService.saveOrUpdate(mission);
+        return missionService.createMission(mission);
     }
 
     @PutMapping("{id}")

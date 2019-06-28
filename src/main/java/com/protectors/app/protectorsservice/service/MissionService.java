@@ -16,7 +16,7 @@ public class MissionService {
         return missionRepository.findById(id).orElseThrow(() -> new MissionNotFound(id));
     }
 
-    public Mission saveOrUpdate(Mission mission) {
+    public Mission createMission(Mission mission) {
         return missionRepository.save(mission);
     }
 

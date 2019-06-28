@@ -52,7 +52,7 @@ public class MissionControllerIntegrationTest {
         mission.setCompleted(false);
         mission.setDeleted(false);
 
-        given(missionService.saveOrUpdate(any(Mission.class))).willReturn(mission);
+        given(missionService.createMission(any(Mission.class))).willReturn(mission);
 
         mvc.perform(post("/mission")
                 .content(objectMapper.writeValueAsString(mission))
@@ -68,7 +68,7 @@ public class MissionControllerIntegrationTest {
         mission.setCompleted(true);
         mission.setDeleted(false);
 
-        given(missionService.saveOrUpdate(any(Mission.class))).willReturn(mission);
+        given(missionService.createMission(any(Mission.class))).willReturn(mission);
 
         mvc.perform(post("/mission")
                 .content(objectMapper.writeValueAsString(mission))
