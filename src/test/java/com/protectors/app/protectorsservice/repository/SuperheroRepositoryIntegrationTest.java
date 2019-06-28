@@ -1,7 +1,6 @@
 package com.protectors.app.protectorsservice.repository;
 
 import com.protectors.app.protectorsservice.entity.Superhero;
-import com.protectors.app.protectorsservice.repository.SuperheroRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +22,7 @@ public class SuperheroRepositoryIntegrationTest {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    Superhero superhero = new Superhero();
+    private Superhero superhero = new Superhero();
 
 
     @Before
