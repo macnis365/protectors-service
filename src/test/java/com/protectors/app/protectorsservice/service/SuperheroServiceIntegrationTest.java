@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -88,6 +89,41 @@ public class SuperheroServiceIntegrationTest {
     public void getSuperheroWhichExist() {
         Superhero superheroFound = superheroService.findSuperhero(121L);
         Assert.assertEquals(superhero.getId(), superheroFound.getId());
+    }
+
+    @Test
+    public void updateWithUserModifiedSuperhero() {
+        Superhero userModifiedSuperhero = new Superhero();
+        userModifiedSuperhero.setId(121L);
+        userModifiedSuperhero.setFirstName("Tony");
+        userModifiedSuperhero.setFirstName("Stark");
+        userModifiedSuperhero.setSuperheroName("Iron Man");
+        Mission mission = new Mission();
+        mission.setName("Endgame");
+        mission.setDeleted(false);
+        mission.setCompleted(true);
+        userModifiedSuperhero.getMissions().add(mission);
+        Mockito.when(superheroRepository.save(userModifiedSuperhero)).thenReturn(userModifiedSuperhero);
+        Superhero superheroUpdated = superheroService.updateSuperhero(121L, userModifiedSuperhero);
+        Assert.assertEquals(userModifiedSuperhero.getId(), superheroUpdated.getId());
+        Assert.assertEquals(userModifiedSuperhero.getFirstName(), superheroUpdated.getFirstName());
+        Assert.assertEquals(userModifiedSuperhero.getLastName(), superheroUpdated.getLastName());
+        Assert.assertEquals(userModifiedSuperhero.getMissions().size(), superheroUpdated.getMissions().size());
+    }
+
+    @Test(expected = SuperheroNotFound.class)
+    public void updateWithUserModifiedNotExistSuperhero() {
+        Superhero superheroUpdated = superheroService.updateSuperhero(11L, superhero);
+    }
+
+    @Test
+    public void deleteExistSuperhero() {
+        superheroService.deleteSuperhero(121L);
+    }
+
+    @Test(expected = SuperheroNotFound.class)
+    public void deleteNonExistSuperhero() {
+        superheroService.deleteSuperhero(11L);
     }
 
 }
