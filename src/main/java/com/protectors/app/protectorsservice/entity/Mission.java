@@ -1,7 +1,6 @@
 package com.protectors.app.protectorsservice.entity;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.EqualsAndHashCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +14,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "mission")
-@ToString
 public class Mission implements Serializable {
     @Id
     @Getter

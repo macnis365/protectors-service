@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.BAD_REQUEST)
 public class ActiveMissionCannotDelete extends RuntimeException {
     public ActiveMissionCannotDelete(Long id) {
-        super("Completed mission cannot be deleted");
+        super("Active mission cannot be deleted");
     }
 
     @Override
