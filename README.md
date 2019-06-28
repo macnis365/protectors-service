@@ -1,23 +1,26 @@
 # protectors-service
-REST application to manage Super hero's
 
-http://localhost:8081/h2-console
+protectors-service is an REST application to manage super hero's and their missions.
 
-http://localhost:8081/swagger-ui.html
+    Technologies used are
+    1. REST API is created using Spring Boot framework to develop restful webservice, unit test.
+    2. H2 as the embedded database Maven used to build, package and run application.
+    3. Jenkins used to make developer life by continuous integration, Jenkinsfile and store it in source control (Github) along with the other code check-in, so that Jenkins can load it directly from SCM and execute the scripted stages. ,
+    4. Docker to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package.
+    5.Swagger to visualize and interact with the API's resources.
 
 
-docker commands
+List of useful commands
 
-list running docker instances
-    docker ps
+    build docker image via maven cmd
+    ./mvnw install dockerfile:build
 
-stop docker instance by containerid
-    docker stop e9894391b0e1
-
-docker cmd to run the image(expose-port:internal-port)
+    to instantiate the container
     docker run -p 8083:8081 -t watchdog/protectors-service:latest
 
+Prerequisites to run this application
 
-build docker image via maven cmd
-
-./mvnw install dockerfile:build
+    Java8
+    Git
+    Maven
+    Docker

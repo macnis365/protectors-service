@@ -45,8 +45,8 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(CompletedMissionCannotDelete.class)
-    public final ResponseEntity<ErrorDetails> handleCompletedMissionCannotDeleteException(CompletedMissionCannotDelete exception, WebRequest request) {
+    @ExceptionHandler(ActiveMissionCannotDelete.class)
+    public final ResponseEntity<ErrorDetails> handleCompletedMissionCannotDeleteException(ActiveMissionCannotDelete exception, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getLocalizedMessage(), request.getDescription(false));
         LOGGER.error("Exception " + exception.getStackTrace());
         return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);

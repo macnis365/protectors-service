@@ -67,4 +67,45 @@ public class Mission implements Serializable {
                 ", isDeleted=" + isDeleted +
                 '}';
     }
+
+
+    public static class MissionBuilder {
+        private Long id;
+        private String name;
+        private boolean completed;
+        private boolean deleted;
+
+        public MissionBuilder() {
+        }
+
+        public MissionBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public MissionBuilder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public MissionBuilder setCompleted(boolean completed) {
+            this.completed = completed;
+            return this;
+        }
+
+        public MissionBuilder setDeleted(boolean deleted) {
+            this.deleted = deleted;
+            return this;
+        }
+
+        public Mission build() {
+            Mission mission = new Mission();
+            mission.setId(id);
+            mission.setName(name);
+            mission.setCompleted(completed);
+            mission.setDeleted(deleted);
+            return mission;
+        }
+
+    }
 }

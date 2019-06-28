@@ -1,6 +1,5 @@
 package com.protectors.app.protectorsservice.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -68,5 +67,48 @@ public class Superhero implements Serializable {
         result = 31 * result + (superheroName != null ? superheroName.hashCode() : 0);
         result = 31 * result + (missions != null ? missions.hashCode() : 0);
         return result;
+    }
+
+    public static class SuperheroBuilder {
+        private Long id;
+        private String firstName;
+        private String lastName;
+        private String superheroName;
+        private Set<Mission> missions = new HashSet<>();
+
+        public SuperheroBuilder setId(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public SuperheroBuilder setFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public SuperheroBuilder setLastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public SuperheroBuilder setSuperheroName(String superheroName) {
+            this.superheroName = superheroName;
+            return this;
+        }
+
+        public SuperheroBuilder setMissions(Set<Mission> missions) {
+            this.missions = missions;
+            return this;
+        }
+
+        public Superhero build() {
+            Superhero superhero = new Superhero();
+            superhero.setId(id);
+            superhero.setFirstName(firstName);
+            superhero.setLastName(lastName);
+            superhero.setSuperheroName(superheroName);
+            superhero.getMissions().addAll(missions);
+            return superhero;
+        }
     }
 }
