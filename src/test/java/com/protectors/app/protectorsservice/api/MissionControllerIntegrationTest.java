@@ -37,41 +37,26 @@ public class MissionControllerIntegrationTest {
 
     @Before
     public void init() {
-        Mission mission = new Mission();
-        mission.setId(10L);
-        mission.setName("Life Code");
-        mission.setCompleted(true);
-        mission.setDeleted(false);
+        Mission mission = new Mission.MissionBuilder().setId(10L).setName("Life Code").setCompleted(true).setDeleted(false).build();
         when(missionService.findMission(10L)).thenReturn(mission);
     }
 
     @Test
     public void createMissionWithoutNameAndReturn400() throws Exception {
-        Mission mission = new Mission();
-        mission.setId(1L);
-        mission.setCompleted(false);
-        mission.setDeleted(false);
-
-        given(missionService.createMission(any(Mission.class))).willReturn(mission);
-
+        Mission missionToPersist = new Mission.MissionBuilder().setId(1L).setCompleted(false).setDeleted(false).build();
+        given(missionService.createMission(any(Mission.class))).willReturn(missionToPersist);
         mvc.perform(post("/mission")
-                .content(objectMapper.writeValueAsString(mission))
+                .content(objectMapper.writeValueAsString(missionToPersist))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     public void createMissionAndReturn200() throws Exception {
-        Mission mission = new Mission();
-        mission.setId(1L);
-        mission.setName("My mission");
-        mission.setCompleted(true);
-        mission.setDeleted(false);
-
-        given(missionService.createMission(any(Mission.class))).willReturn(mission);
-
+        Mission missionToPersist = new Mission.MissionBuilder().setName("My mission").setId(1L).setCompleted(true).setDeleted(false).build();
+        given(missionService.createMission(any(Mission.class))).willReturn(missionToPersist);
         mvc.perform(post("/mission")
-                .content(objectMapper.writeValueAsString(mission))
+                .content(objectMapper.writeValueAsString(missionToPersist))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("My mission")))
@@ -101,15 +86,10 @@ public class MissionControllerIntegrationTest {
 
     @Test
     public void updateMissionAndReturnOk() throws Exception {
-        Mission mission = new Mission();
-        mission.setId(2L);
-        mission.setName("godspeed");
-        mission.setCompleted(false);
-        mission.setDeleted(false);
-        given(missionService.update(any(Long.class), any(Mission.class))).willReturn(mission);
-
-        mvc.perform(put("/mission/2", mission)
-                .content(objectMapper.writeValueAsString(mission))
+        Mission updateMission = new Mission.MissionBuilder().setName("godspeed").setId(2L).setCompleted(false).setDeleted(false).build();
+        given(missionService.update(any(Long.class), any(Mission.class))).willReturn(updateMission);
+        mvc.perform(put("/mission/2", updateMission)
+                .content(objectMapper.writeValueAsString(updateMission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("godspeed")))
@@ -120,15 +100,10 @@ public class MissionControllerIntegrationTest {
 
     @Test
     public void updateMissionAndReturnNok() throws Exception {
-        Mission mission = new Mission();
-        mission.setId(2L);
-        mission.setName("godspeed");
-        mission.setCompleted(true);
-        mission.setDeleted(true);
+        Mission updateMission = new Mission.MissionBuilder().setName("godspeed").setId(2L).setCompleted(true).setDeleted(true).build();
         when(missionService.update(anyLong(), any(Mission.class))).thenThrow(new ActiveMissionCannotDelete(2L));
-
-        mvc.perform(put("/mission/2", mission)
-                .content(objectMapper.writeValueAsString(mission))
+        mvc.perform(put("/mission/2", updateMission)
+                .content(objectMapper.writeValueAsString(updateMission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
 
@@ -142,15 +117,11 @@ public class MissionControllerIntegrationTest {
 
     @Test
     public void deleteMissionByIdNotFound200() throws Exception {
-        Mission mission = new Mission();
-        mission.setId(2L);
-        mission.setName("godspeed");
-        mission.setCompleted(true);
-        mission.setDeleted(true);
-        given(missionService.softDeleteMission(any(Long.class))).willReturn(mission);
+        Mission deleteMission = new Mission.MissionBuilder().setName("godspeed").setId(2L).setCompleted(true).setDeleted(true).build();
+        given(missionService.softDeleteMission(any(Long.class))).willReturn(deleteMission);
 
         mvc.perform(delete("/mission/2")
-                .content(objectMapper.writeValueAsString(mission))
+                .content(objectMapper.writeValueAsString(deleteMission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("godspeed")))
