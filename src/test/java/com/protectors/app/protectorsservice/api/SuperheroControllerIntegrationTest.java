@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.entity.Superhero;
-import com.protectors.app.protectorsservice.repository.SuperheroRepository;
 import com.protectors.app.protectorsservice.service.SuperheroService;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,9 +33,6 @@ public class SuperheroControllerIntegrationTest {
 
     @MockBean
     private SuperheroService superheroService;
-
-    @MockBean
-    private SuperheroRepository superheroRepository;
 
     @Before
     public void init() {
