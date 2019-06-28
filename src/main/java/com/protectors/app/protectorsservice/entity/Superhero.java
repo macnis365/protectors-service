@@ -74,7 +74,7 @@ public class Superhero implements Serializable {
         private String firstName;
         private String lastName;
         private String superheroName;
-        private Set<Mission> missions;
+        private Set<Mission> missions = new HashSet<>();
 
         public SuperheroBuilder setId(Long id) {
             this.id = id;
@@ -86,8 +86,8 @@ public class Superhero implements Serializable {
             return this;
         }
 
-        public SuperheroBuilder setLastName(String firstName) {
-            this.firstName = firstName;
+        public SuperheroBuilder setLastName(String lastName) {
+            this.lastName = lastName;
             return this;
         }
 
@@ -107,7 +107,7 @@ public class Superhero implements Serializable {
             superhero.setFirstName(firstName);
             superhero.setLastName(lastName);
             superhero.setSuperheroName(superheroName);
-            superhero.setMissions(missions);
+            superhero.getMissions().addAll(missions);
             return superhero;
         }
     }

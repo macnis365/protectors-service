@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,30 +40,20 @@ public class SuperheroServiceIntegrationTest {
     @MockBean
     private SuperheroRepository superheroRepository;
 
-    Superhero superhero = new Superhero();
+    Superhero superhero;
 
     @Before
     public void setUp() {
-        superhero.setId(121L);
-        superhero.setSuperheroName("Superman");
-        superhero.setFirstName("Clark");
-        superhero.setLastName("Kent");
-        Mission mission = new Mission();
-        mission.setName("superhero mission");
-        mission.setCompleted(true);
-        mission.setDeleted(false);
-        superhero.getMissions().add(mission);
-
+        Mission mission = new Mission.MissionBuilder().setId(2L).setName("superhero mission").setCompleted(true).setDeleted(false).build();
+        superhero = new Superhero.SuperheroBuilder().setId(121L).setSuperheroName("Superman").setFirstName("Clark").setLastName("Kent").setMissions(Stream.of(mission).collect(Collectors.toSet())).build();
         Mockito.when(superheroRepository.save(superhero))
                 .thenReturn(superhero);
         Mockito.when(superheroRepository.findById(121L)).thenReturn(Optional.ofNullable(superhero));
-
     }
 
     @Test
     public void saveSuperheroNameAndReturn() {
         Superhero createdHero = superheroService.createSuperhero(superhero);
-
         assertThat(createdHero.getFirstName()).isEqualTo(superhero.getFirstName());
         assertThat(createdHero.getLastName()).isEqualTo(superhero.getLastName());
         assertThat(createdHero.getSuperheroName()).isEqualTo(superhero.getSuperheroName());
@@ -70,13 +62,9 @@ public class SuperheroServiceIntegrationTest {
 
     @Test(expected = ActiveMissionCannotDelete.class)
     public void saveSuperheroName() {
-        Mission mission = new Mission();
-        mission.setId(1L);
-        mission.setName("completed mission");
-        mission.setCompleted(false);
-        mission.setDeleted(true);
-        superhero.getMissions().add(mission);
-        superheroService.createSuperhero(superhero);
+        Mission mission = new Mission.MissionBuilder().setId(2L).setName("superhero mission").setCompleted(false).setDeleted(true).build();
+        Superhero hero = new Superhero.SuperheroBuilder().setId(121L).setSuperheroName("Superman").setFirstName("Clark").setLastName("Kent").setMissions(Stream.of(mission).collect(Collectors.toSet())).build();
+        superheroService.createSuperhero(hero);
     }
 
     @Test(expected = SuperheroNotFound.class)
@@ -92,16 +80,8 @@ public class SuperheroServiceIntegrationTest {
 
     @Test
     public void updateWithUserModifiedSuperhero() {
-        Superhero userModifiedSuperhero = new Superhero();
-        userModifiedSuperhero.setId(121L);
-        userModifiedSuperhero.setFirstName("Tony");
-        userModifiedSuperhero.setFirstName("Stark");
-        userModifiedSuperhero.setSuperheroName("Iron Man");
-        Mission mission = new Mission();
-        mission.setName("Endgame");
-        mission.setDeleted(false);
-        mission.setCompleted(true);
-        userModifiedSuperhero.getMissions().add(mission);
+        Mission mission = new Mission.MissionBuilder().setId(2L).setName("Endgame").setCompleted(true).setDeleted(true).build();
+        Superhero userModifiedSuperhero = new Superhero.SuperheroBuilder().setId(121L).setSuperheroName("Iron Man").setFirstName("Tony").setLastName("Stark").setMissions(Stream.of(mission).collect(Collectors.toSet())).build();
         Mockito.when(superheroRepository.save(userModifiedSuperhero)).thenReturn(userModifiedSuperhero);
         Superhero superheroUpdated = superheroService.updateSuperhero(121L, userModifiedSuperhero);
         Assert.assertEquals(userModifiedSuperhero.getId(), superheroUpdated.getId());
@@ -112,7 +92,7 @@ public class SuperheroServiceIntegrationTest {
 
     @Test(expected = SuperheroNotFound.class)
     public void updateWithUserModifiedNotExistSuperhero() {
-        Superhero superheroUpdated = superheroService.updateSuperhero(11L, superhero);
+        superheroService.updateSuperhero(11L, superhero);
     }
 
     @Test

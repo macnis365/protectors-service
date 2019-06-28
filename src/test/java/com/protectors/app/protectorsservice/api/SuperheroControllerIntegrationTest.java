@@ -16,6 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -36,27 +41,16 @@ public class SuperheroControllerIntegrationTest {
 
     @Before
     public void init() {
-        Superhero superhero = new Superhero();
-        superhero.setId(1L);
-        superhero.setSuperheroName("Superman");
-        superhero.setFirstName("Clark");
-        superhero.setLastName("Kent");
+        Superhero superhero = new Superhero.SuperheroBuilder().setId(1L).setSuperheroName("Superman").setFirstName("Clark").setLastName("Kent").build();
         when(superheroService.findSuperhero(1L)).thenReturn(superhero);
     }
 
     @Test
     public void updateSuperheroAndReturn200() throws Exception {
-
-        Superhero superhero = new Superhero();
-        superhero.setId(1L);
-        superhero.setSuperheroName("Superman");
-        superhero.setFirstName("Clark");
-        superhero.setLastName("Kent");
-
-        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(superhero);
-
+        Superhero createSuperhero = new Superhero.SuperheroBuilder().setId(1L).setSuperheroName("Superman").setFirstName("Clark").setLastName("Kent").build();
+        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(createSuperhero);
         mvc.perform(post("/superhero")
-                .content(objectMapper.writeValueAsString(superhero))
+                .content(objectMapper.writeValueAsString(createSuperhero))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstName", is("Clark")))
@@ -67,16 +61,10 @@ public class SuperheroControllerIntegrationTest {
     @Test
     public void createSuperheroWithoutSuperheroNameAndReturn400() throws Exception {
 
-        Superhero superhero = new Superhero();
-        superhero.setId(1L);
-        superhero.setSuperheroName("");
-        superhero.setFirstName("Clark");
-        superhero.setLastName("Kent");
-
-        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(superhero);
-
+        Superhero createSuperhero = new Superhero.SuperheroBuilder().setId(1L).setFirstName("Clark").setLastName("Kent").build();
+        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(createSuperhero);
         mvc.perform(post("/superhero")
-                .content(objectMapper.writeValueAsString(superhero))
+                .content(objectMapper.writeValueAsString(createSuperhero))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
@@ -91,7 +79,6 @@ public class SuperheroControllerIntegrationTest {
 
     @Test
     public void findASuperheroWhichExistOK() throws Exception {
-
         mvc.perform(get("/superhero/1"))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
@@ -99,26 +86,14 @@ public class SuperheroControllerIntegrationTest {
                 .andExpect(jsonPath("$.firstName", is("Clark")))
                 .andExpect(jsonPath("$.lastName", is("Kent")))
                 .andExpect(jsonPath("$.superheroName", is("Superman")));
-
         verify(superheroService, times(1)).findSuperhero(1L);
     }
 
     @Test
     public void updateSuperheroWithMissionAndReturn() throws Exception {
-        Superhero superhero = new Superhero();
-        superhero.setId(1L);
-        superhero.setSuperheroName("Superman");
-        superhero.setFirstName("Clark");
-        superhero.setLastName("Kent");
-        Mission mission = new Mission();
-        mission.setId(2L);
-        mission.setName("godspeed");
-        mission.setCompleted(false);
-        mission.setDeleted(false);
-        superhero.getMissions().add(mission);
-
+        Mission updateMission = new Mission.MissionBuilder().setId(2L).setName("godspeed").setCompleted(false).setDeleted(false).build();
+        Superhero superhero = new Superhero.SuperheroBuilder().setId(1L).setSuperheroName("Superman").setFirstName("Clark").setLastName("Kent").setMissions(Stream.of(updateMission).collect(Collectors.toSet())).build();
         given(superheroService.updateSuperhero(any(Long.class), any(Superhero.class))).willReturn(superhero);
-
         mvc.perform(put("/superhero/1", superhero)
                 .content(objectMapper.writeValueAsString(superhero))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -137,6 +112,4 @@ public class SuperheroControllerIntegrationTest {
         doThrow(new SuperheroNotFound(5L)).doNothing().when(superheroService).deleteSuperhero(anyLong());
         mvc.perform(delete("/superhero/5")).andExpect(status().isNotFound());
     }
-
-
 }

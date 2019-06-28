@@ -37,25 +37,19 @@ public class MissionServiceIntegrationTest {
     @MockBean
     private MissionRepository missionRepository;
 
-    Mission mission = new Mission();
+    Mission mission;
 
     @Before
     public void setUp() {
-        mission.setId(2L);
-        mission.setName("infinity war");
-        mission.setCompleted(true);
-        mission.setDeleted(false);
-
+        mission = new Mission.MissionBuilder().setId(2L).setName("infinity war").setCompleted(true).setDeleted(false).build();
         Mockito.when(missionRepository.save(mission))
                 .thenReturn(mission);
         Mockito.when(missionRepository.findById(2L)).thenReturn(Optional.ofNullable(mission));
-
     }
 
     @Test
     public void saveMissionAndReturnSame() {
         Mission savedMission = missionService.createMission(this.mission);
-
         assertThat(mission.getId()).isEqualTo(savedMission.getId());
         assertThat(mission.getName()).isEqualTo(savedMission.getName());
         assertThat(mission.isDeleted()).isEqualTo(savedMission.isDeleted());
@@ -70,7 +64,7 @@ public class MissionServiceIntegrationTest {
     }
 
     @Test
-    public void getExistingMission(){
+    public void getExistingMission() {
         Mission missionFromDatabase = missionService.findMission(2L);
         Assert.assertEquals(mission.getId(), missionFromDatabase.getId());
         Assert.assertEquals(mission.getName(), missionFromDatabase.getName());
@@ -90,11 +84,7 @@ public class MissionServiceIntegrationTest {
 
     @Test
     public void updateExistingMissionWithUser() {
-        Mission userModifiedMission = new Mission();
-        userModifiedMission.setId(2L);
-        userModifiedMission.setName("far from home");
-        userModifiedMission.setCompleted(false);
-        userModifiedMission.setDeleted(false);
+        Mission userModifiedMission = new Mission.MissionBuilder().setId(2L).setName("far from home").setCompleted(false).setDeleted(false).build();
         Mockito.when(missionRepository.save(mission))
                 .thenReturn(userModifiedMission);
         Mission modifiedMission = missionService.update(2L, mission);
@@ -106,11 +96,7 @@ public class MissionServiceIntegrationTest {
 
     @Test
     public void deleteExistMission() {
-        Mission softDeleteMission = new Mission();
-        softDeleteMission.setDeleted(true);
-        softDeleteMission.setCompleted(true);
-        softDeleteMission.setName("infinity war");
-        softDeleteMission.setId(2L);
+        Mission softDeleteMission = new Mission.MissionBuilder().setId(2L).setName("infinity war").setCompleted(true).setDeleted(true).build();
         Mockito.when(missionRepository.save(mission))
                 .thenReturn(softDeleteMission);
         Mission deletedMission = missionService.softDeleteMission(2L);
