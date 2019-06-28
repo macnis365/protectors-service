@@ -3,7 +3,7 @@ package com.protectors.app.protectorsservice.service;
 import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.repository.SuperheroRepository;
-import com.protectors.app.protectorsservice.utility.CompareUtility;
+import com.protectors.app.protectorsservice.utility.MissionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class SuperheroService {
     private SuperheroRepository superheroRepository;
 
     public Superhero createSuperhero(Superhero superhero) {
-        CompareUtility.validateActiveMissions(superhero.getMissions());
+        MissionUtility.validateActiveMissions(superhero.getMissions());
         return superheroRepository.save(superhero);
     }
 
@@ -25,7 +25,7 @@ public class SuperheroService {
     public Superhero updateSuperhero(Long id, Superhero userModifiedSuperhero) {
         return superheroRepository.findById(id).map((Superhero superheroFromDatabase) -> {
                     updatePersistedSuperhero(userModifiedSuperhero, superheroFromDatabase);
-                    CompareUtility.updatePersistedMissions(userModifiedSuperhero, superheroFromDatabase);
+                    MissionUtility.updatePersistedMissions(userModifiedSuperhero, superheroFromDatabase);
                     return superheroRepository.save(superheroFromDatabase);
                 }
         ).orElseThrow(() -> new SuperheroNotFound(id));

@@ -4,7 +4,7 @@ import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotD
 import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.repository.MissionRepository;
-import com.protectors.app.protectorsservice.utility.CompareUtility;
+import com.protectors.app.protectorsservice.utility.MissionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +18,7 @@ public class MissionService {
     }
 
     public Mission createMission(Mission mission) {
-        CompareUtility.validateActiveMission(mission);
+        MissionUtility.validateActiveMission(mission);
         return missionRepository.save(mission);
     }
 
@@ -37,7 +37,7 @@ public class MissionService {
 
     public Mission softDeleteMission(Long id) {
         Mission mission = missionRepository.findById(id).orElseThrow(() -> new MissionNotFound(id));
-        CompareUtility.validateActiveMission(mission);
+        MissionUtility.validateActiveMission(mission);
         mission.setDeleted(Boolean.TRUE);
         return missionRepository.save(mission);
     }
