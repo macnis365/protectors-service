@@ -21,9 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -127,14 +125,37 @@ public class MissionControllerIntegrationTest {
         mission.setName("godspeed");
         mission.setCompleted(true);
         mission.setDeleted(true);
-        given(missionService.update(any(Long.class), any(Mission.class))).willReturn(mission);
-
         when(missionService.update(anyLong(), any(Mission.class))).thenThrow(new CompletedMissionCannotDelete(2L));
 
         mvc.perform(put("/mission/2", mission)
                 .content(objectMapper.writeValueAsString(mission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    public void deleteMissionByIdNotFound404() throws Exception {
+        when(missionService.softDeleteMission(anyLong())).thenThrow(new MissionNotFound(2L));
+        mvc.perform(delete("/mission/2")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void deleteMissionByIdNotFound200() throws Exception {
+        Mission mission = new Mission();
+        mission.setId(2L);
+        mission.setName("godspeed");
+        mission.setCompleted(true);
+        mission.setDeleted(true);
+        given(missionService.update(any(Long.class), any(Mission.class))).willReturn(mission);
+
+        mvc.perform(put("/mission/2", mission)
+                .content(objectMapper.writeValueAsString(mission))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("godspeed")))
+                .andExpect(jsonPath("$.deleted", is(true)))
+                .andExpect(jsonPath("$.completed", is(true)));
 
     }
 }
