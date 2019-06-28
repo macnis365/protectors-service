@@ -42,7 +42,7 @@ public class CompareUtilityTest {
     }
 
     @Test
-    public void findMissionsToUpdateTest() {
+    public void updateOldMissionTest() {
         Set<Mission> userModifiedMissions = new HashSet<>();
         Mission mission1 = new Mission();
         mission1.setId(1L);
@@ -69,7 +69,7 @@ public class CompareUtilityTest {
         Mission mission3 = new Mission();
         mission3.setId(2L);
         mission3.setName("ms3");
-        mission3.setCompleted(false);
+        mission3.setCompleted(true);
         mission3.setDeleted(true);
         oldMissions.add(mission3);
 
@@ -77,45 +77,43 @@ public class CompareUtilityTest {
     }
 
     @Test
-    public void findMissionsToUpdateTest2() {
-        Set<Mission> userModifiedMissions = new HashSet<>();
+    public void findMissionsToUpdateDatabase() {
+        Set<Mission> userOldModifiedMissions = new HashSet<>();
         Mission mission1 = new Mission();
         mission1.setId(1L);
         mission1.setName("ms1");
         mission1.setCompleted(false);
         mission1.setDeleted(false);
-        userModifiedMissions.add(mission1);
+        userOldModifiedMissions.add(mission1);
 
         Mission mission2 = new Mission();
         mission2.setId(2L);
         mission2.setName("ms2");
         mission2.setCompleted(false);
         mission2.setDeleted(false);
-        userModifiedMissions.add(mission2);
+        userOldModifiedMissions.add(mission2);
 
         Superhero superheroFromDataBase = new Superhero();
         superheroFromDataBase.setId(22L);
         superheroFromDataBase.setSuperheroName("new name");
         superheroFromDataBase.setFirstName("first");
         superheroFromDataBase.setLastName("last");
-        superheroFromDataBase.setMissions(userModifiedMissions);
+        superheroFromDataBase.setMissions(userOldModifiedMissions);
 
-        Set<Mission> oldMissions = new HashSet<>();
+        Set<Mission> missionsFromDatabase = new HashSet<>();
         Mission mission3 = new Mission();
         mission3.setId(2L);
         mission3.setName("ms3");
-        mission3.setCompleted(false);
+        mission3.setCompleted(true);
         mission3.setDeleted(true);
-        oldMissions.add(mission3);
+        missionsFromDatabase.add(mission3);
 
-        Mission mission4 = new Mission();
-        mission4.setId(1L);
-        mission4.setName("4");
-        mission4.setCompleted(true);
-        mission4.setDeleted(false);
-        oldMissions.add(mission4);
-
-        CompareUtility.findMissionsToUpdate(superheroFromDataBase, oldMissions);
+        Set<Mission> missionsToUpdate = CompareUtility.findMissionsToUpdate(superheroFromDataBase, userOldModifiedMissions);
+        for (Mission mission : missionsToUpdate) {
+            if (mission.getId().equals(mission2.getId())) {
+                Assert.assertEquals(mission.getName(), mission2.getName());
+            }
+        }
     }
 
     @Test

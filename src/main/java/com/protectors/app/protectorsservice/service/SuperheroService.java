@@ -13,7 +13,8 @@ public class SuperheroService {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    public Superhero saveOrUpdateSuperhero(Superhero superhero) {
+    public Superhero createSuperhero(Superhero superhero) {
+        CompareUtility.validateActiveMissions(superhero.getMissions());
         return superheroRepository.save(superhero);
     }
 

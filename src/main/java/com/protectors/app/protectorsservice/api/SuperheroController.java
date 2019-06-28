@@ -1,9 +1,7 @@
 package com.protectors.app.protectorsservice.api;
 
-import com.protectors.app.protectorsservice.customexception.SuperheroNotFound;
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.service.SuperheroService;
-import com.protectors.app.protectorsservice.utility.CompareUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +18,7 @@ public class SuperheroController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Superhero createSuperhero(@Valid @RequestBody Superhero superhero) {
-        return superheroService.saveOrUpdateSuperhero(superhero);
+        return superheroService.createSuperhero(superhero);
     }
 
     @GetMapping("{id}")

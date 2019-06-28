@@ -147,9 +147,9 @@ public class MissionControllerIntegrationTest {
         mission.setName("godspeed");
         mission.setCompleted(true);
         mission.setDeleted(true);
-        given(missionService.update(any(Long.class), any(Mission.class))).willReturn(mission);
+        given(missionService.softDeleteMission(any(Long.class))).willReturn(mission);
 
-        mvc.perform(put("/mission/2", mission)
+        mvc.perform(delete("/mission/2")
                 .content(objectMapper.writeValueAsString(mission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -159,4 +159,3 @@ public class MissionControllerIntegrationTest {
 
     }
 }
-

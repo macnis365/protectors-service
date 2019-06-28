@@ -21,9 +21,7 @@ public class CompareUtility {
     public static Mission amendMatchedMission(Mission missionToUpdate, Set<Mission> missionSet) {
         for (Mission mission : missionSet) {
             if (missionToUpdate.equals(mission)) {
-                if (Boolean.TRUE.equals(mission.isCompleted()) && Boolean.TRUE.equals(mission.isDeleted())) {
-                    throw new CompletedMissionCannotDelete(mission.getId());
-                }
+                validateActiveMission(mission);
                 missionToUpdate.setName(mission.getName());
                 missionToUpdate.setDeleted(mission.isDeleted());
                 missionToUpdate.setCompleted(mission.isCompleted());
@@ -31,6 +29,18 @@ public class CompareUtility {
         }
         System.out.println(missionToUpdate);
         return missionToUpdate;
+    }
+
+    public static void validateActiveMission(Mission mission) {
+        if (Boolean.FALSE.equals(mission.isCompleted()) && Boolean.TRUE.equals(mission.isDeleted())) {
+            throw new CompletedMissionCannotDelete(mission.getId());
+        }
+    }
+
+    public static void validateActiveMissions(Set<Mission> missions) {
+        for (Mission mission : missions) {
+            validateActiveMission(mission);
+        }
     }
 
     public static void updatePersistedMissions(Superhero userModifiedSuperhero, Superhero superheroFromDatabase) {

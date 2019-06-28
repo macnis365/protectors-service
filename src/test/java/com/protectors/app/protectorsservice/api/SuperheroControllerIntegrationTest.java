@@ -53,7 +53,7 @@ public class SuperheroControllerIntegrationTest {
         superhero.setFirstName("Clark");
         superhero.setLastName("Kent");
 
-        given(superheroService.saveOrUpdateSuperhero(any(Superhero.class))).willReturn(superhero);
+        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(superhero);
 
         mvc.perform(post("/superhero")
                 .content(objectMapper.writeValueAsString(superhero))
@@ -73,7 +73,7 @@ public class SuperheroControllerIntegrationTest {
         superhero.setFirstName("Clark");
         superhero.setLastName("Kent");
 
-        given(superheroService.saveOrUpdateSuperhero(any(Superhero.class))).willReturn(superhero);
+        given(superheroService.createSuperhero(any(Superhero.class))).willReturn(superhero);
 
         mvc.perform(post("/superhero")
                 .content(objectMapper.writeValueAsString(superhero))
