@@ -2,6 +2,8 @@ package com.protectors.app.protectorsservice.repository;
 
 import com.protectors.app.protectorsservice.entity.Superhero;
 import com.protectors.app.protectorsservice.repository.SuperheroRepository;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +23,38 @@ public class SuperheroRepositoryIntegrationTest {
     @Autowired
     private SuperheroRepository superheroRepository;
 
-    @Test
-    public void whenFindByName_thenReturnEmployee() {
-        // given
-        Superhero superhero = new Superhero();
+    Superhero superhero = new Superhero();
+
+
+    @Before
+    public void setUp() {
         superhero.setSuperheroName("Superman");
         superhero.setFirstName("Clark");
         superhero.setLastName("Kent");
         entityManager.persist(superhero);
         entityManager.flush();
+    }
 
-        // when
+    @Test
+    public void createSuperheroAndReturn() {
         Superhero found = superheroRepository.save(superhero);
-
-        // then
         assertThat(found.getSuperheroName())
                 .isEqualTo(superhero.getSuperheroName());
+    }
+
+    @Test
+    public void findSuperheroWhichExist() {
+        Superhero newSuperhero = new Superhero();
+        newSuperhero.setSuperheroName("Wonder Woman");
+        newSuperhero.setFirstName("Diana");
+        newSuperhero.setLastName("Princess");
+        Superhero persistSuperhero = entityManager.persist(newSuperhero);
+        entityManager.flush();
+        Superhero foundSuperhero = superheroRepository.findById(persistSuperhero.getId()).get();
+        Assert.assertEquals(persistSuperhero.getId(), foundSuperhero.getId());
+        Assert.assertEquals(persistSuperhero.getFirstName(), foundSuperhero.getFirstName());
+        Assert.assertEquals(persistSuperhero.getLastName(), foundSuperhero.getLastName());
+        Assert.assertEquals(persistSuperhero.getSuperheroName(), foundSuperhero.getSuperheroName());
+        Assert.assertEquals(persistSuperhero.getMissions().size(), foundSuperhero.getMissions().size());
     }
 }

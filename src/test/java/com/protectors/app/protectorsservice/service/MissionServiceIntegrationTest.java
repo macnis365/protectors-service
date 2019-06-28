@@ -66,7 +66,7 @@ public class MissionServiceIntegrationTest {
     public void cannotSaveAndDeleteActiveMission() {
         mission.setCompleted(false);
         mission.setDeleted(true);
-        Mission savedMission = missionService.createMission(this.mission);
+        missionService.createMission(this.mission);
     }
 
     @Test
