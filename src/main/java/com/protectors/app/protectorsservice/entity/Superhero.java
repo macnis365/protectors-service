@@ -36,7 +36,7 @@ public class Superhero implements Serializable {
     @NotNull(message = "superhero name cannot not be null")
     private String superheroName;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinTable(name = "superhero_missions",
             joinColumns = {@JoinColumn(name = "superhero_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "mission_id", referencedColumnName = "id")})
