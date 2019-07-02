@@ -40,6 +40,7 @@ public class SuperheroService {
 
     public void deleteSuperhero(Long id) {
         Superhero superhero = superheroRepository.findById(id).orElseThrow(() -> new SuperheroNotFound(id));
+        superhero.setMissions(null);
         superheroRepository.delete(superhero);
     }
 }
