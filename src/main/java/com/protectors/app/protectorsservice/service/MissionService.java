@@ -31,10 +31,7 @@ public class MissionService {
 
     public Mission update(Long id, Mission mission) {
         Mission missionFromDatabase = missionRepository.findById(id).orElseThrow(() -> new MissionNotFound(id));
-        if (Boolean.TRUE.equals(mission.isCompleted() && Boolean.TRUE.equals(mission.isDeleted()))) {
-            throw new ActiveMissionCannotDelete(id);
-        }
-
+        MissionUtility.validateActiveMission(mission);
         missionFromDatabase.setName(mission.getName());
         missionFromDatabase.setCompleted(mission.isCompleted());
         return missionRepository.save(missionFromDatabase);
