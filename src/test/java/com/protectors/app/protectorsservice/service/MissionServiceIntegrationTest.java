@@ -36,6 +36,9 @@ public class MissionServiceIntegrationTest {
 
     @MockBean
     private MissionRepository missionRepository;
+    
+    @MockBean
+    private SuperheroRepository superheroRepository;
 
     Mission mission;
 
