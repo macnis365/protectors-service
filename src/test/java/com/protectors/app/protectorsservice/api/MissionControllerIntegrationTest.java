@@ -111,22 +111,15 @@ public class MissionControllerIntegrationTest {
 
     @Test
     public void deleteMissionByIdNotFound404() throws Exception {
-        when(missionService.softDeleteMission(anyLong())).thenThrow(new MissionNotFound(2L));
+        doThrow(new MissionNotFound(2L)).doNothing().when(missionService).softDeleteMission(anyLong());
         mvc.perform(delete("/mission/2")).andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteMissionByIdNotFound200() throws Exception {
-        Mission deleteMission = new Mission.MissionBuilder().setName("godspeed").setId(2L).setCompleted(true).setDeleted(true).build();
-        given(missionService.softDeleteMission(any(Long.class))).willReturn(deleteMission);
-
-        mvc.perform(delete("/mission/2")
-                .content(objectMapper.writeValueAsString(deleteMission))
+        mvc.perform(delete("/mission/10")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("godspeed")))
-                .andExpect(jsonPath("$.deleted", is(true)))
-                .andExpect(jsonPath("$.completed", is(true)));
+                .andExpect(status().isNoContent());
 
     }
 }

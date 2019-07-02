@@ -32,7 +32,8 @@ public class MissionController {
     }
 
     @DeleteMapping("{id}")
-    public Mission softDeleteMission(@PathVariable final Long id) {
-        return missionService.softDeleteMission(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void softDeleteMission(@PathVariable final Long id) {
+        missionService.softDeleteMission(id);
     }
 }
