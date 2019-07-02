@@ -118,7 +118,6 @@ public class MissionControllerIntegrationTest {
     @Test
     public void deleteMissionByIdNotFound200() throws Exception {
         mvc.perform(delete("/mission/10")
-                .content(objectMapper.writeValueAsString(deleteMission))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
