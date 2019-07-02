@@ -43,12 +43,11 @@ public class MissionUtility {
 
     public static void updatePersistedMissions(Superhero userModifiedSuperhero, Superhero superheroFromDatabase) {
         if (!CollectionUtils.isEmpty(userModifiedSuperhero.getMissions())) {
+            superheroFromDatabase.getMissions().removeAll(superheroFromDatabase.getMissions());
             Set<Mission> oldMissionsUserModified = MissionUtility.getMatchedMissionsFrom(userModifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
             Set<Mission> newMissions = MissionUtility.getUnMatchedMissions(userModifiedSuperhero.getMissions(), superheroFromDatabase.getMissions());
             superheroFromDatabase.getMissions().addAll(newMissions);
             Set<Mission> updatedMissions = findMissionsToUpdate(superheroFromDatabase, oldMissionsUserModified);
-            Set<Mission> removeAssociatedMissions = MissionUtility.getUnMatchedMissions(superheroFromDatabase.getMissions(),userModifiedSuperhero.getMissions());
-            superheroFromDatabase.getMissions().removeAll(removeAssociatedMissions);
             superheroFromDatabase.getMissions().removeAll(oldMissionsUserModified);
             superheroFromDatabase.getMissions().addAll(updatedMissions);
         }
