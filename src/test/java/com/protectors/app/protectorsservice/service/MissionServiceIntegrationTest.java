@@ -4,6 +4,7 @@ import com.protectors.app.protectorsservice.customexception.ActiveMissionCannotD
 import com.protectors.app.protectorsservice.customexception.MissionNotFound;
 import com.protectors.app.protectorsservice.entity.Mission;
 import com.protectors.app.protectorsservice.repository.MissionRepository;
+import com.protectors.app.protectorsservice.repository.SuperheroRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -102,11 +103,7 @@ public class MissionServiceIntegrationTest {
         Mission softDeleteMission = new Mission.MissionBuilder().setId(2L).setName("infinity war").setCompleted(true).setDeleted(true).build();
         Mockito.when(missionRepository.save(mission))
                 .thenReturn(softDeleteMission);
-        Mission deletedMission = missionService.softDeleteMission(2L);
-        Assert.assertEquals(softDeleteMission.getId(), deletedMission.getId());
-        Assert.assertEquals(softDeleteMission.getName(), deletedMission.getName());
-        Assert.assertEquals(softDeleteMission.isDeleted(), deletedMission.isDeleted());
-        Assert.assertEquals(softDeleteMission.isCompleted(), deletedMission.isCompleted());
+        missionService.softDeleteMission(2L);
     }
 
     @Test(expected = MissionNotFound.class)
