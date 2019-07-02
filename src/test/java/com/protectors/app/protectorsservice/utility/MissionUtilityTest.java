@@ -20,7 +20,6 @@ public class MissionUtilityTest {
         Mission amendMatchedMission = MissionUtility.amendMatchedMission(mission3, userModifiedMissions);
         Assert.assertEquals(mission2.getId(), amendMatchedMission.getId());
         Assert.assertEquals(mission2.isCompleted(), amendMatchedMission.isCompleted());
-        Assert.assertEquals(mission2.isDeleted(), amendMatchedMission.isDeleted());
         Assert.assertEquals(mission2, amendMatchedMission);
 
     }
