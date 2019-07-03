@@ -31,9 +31,8 @@ public class Mission implements Serializable {
     @Setter
     private boolean isCompleted;
 
-    @Getter
+    @Getter(onMethod = @__( @JsonIgnore))
     @Setter
-    @JsonIgnore
     private boolean isDeleted = false;
 
     @ManyToMany(mappedBy = "missions", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
