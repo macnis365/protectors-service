@@ -32,7 +32,7 @@ public class SuperheroController {
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteSuperhero(@PathVariable final Long id) {
         superheroService.deleteSuperhero(id);
     }

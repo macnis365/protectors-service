@@ -60,7 +60,6 @@ public class MissionControllerIntegrationTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is("My mission")))
-                .andExpect(jsonPath("$.deleted", is(false)))
                 .andExpect(jsonPath("$.completed", is(true)));
     }
 
@@ -78,7 +77,6 @@ public class MissionControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(10)))
                 .andExpect(jsonPath("$.name", is("Life Code")))
-                .andExpect(jsonPath("$.deleted", is(false)))
                 .andExpect(jsonPath("$.completed", is(true)));
 
         verify(missionService, times(1)).findMission(10L);
@@ -93,7 +91,6 @@ public class MissionControllerIntegrationTest {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is("godspeed")))
-                .andExpect(jsonPath("$.deleted", is(false)))
                 .andExpect(jsonPath("$.completed", is(false)));
 
     }

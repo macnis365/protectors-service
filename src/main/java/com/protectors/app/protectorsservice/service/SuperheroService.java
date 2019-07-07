@@ -6,6 +6,7 @@ import com.protectors.app.protectorsservice.repository.SuperheroRepository;
 import com.protectors.app.protectorsservice.utility.MissionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SuperheroService {
