@@ -6,6 +6,7 @@ import com.protectors.app.protectorsservice.repository.SuperheroRepository;
 import com.protectors.app.protectorsservice.utility.MissionUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SuperheroService {
@@ -38,6 +39,7 @@ public class SuperheroService {
         superheroFromDatabase.setSuperheroName(userModifiedSuperhero.getSuperheroName());
     }
 
+    @Transactional
     public void deleteSuperhero(Long id) {
         Superhero superhero = superheroRepository.findById(id).orElseThrow(() -> new SuperheroNotFound(id));
         superhero.setMissions(null);
