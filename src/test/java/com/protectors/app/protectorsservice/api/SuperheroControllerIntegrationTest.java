@@ -100,7 +100,6 @@ public class SuperheroControllerIntegrationTest {
                 .andExpect(jsonPath("$.lastName", is("Kent")))
                 .andExpect(jsonPath("$.superheroName", is("Superman")))
                 .andExpect(jsonPath("$.missions[0].name", is("godspeed")))
-                .andExpect(jsonPath("$.missions[0].deleted", is(false)))
                 .andExpect(jsonPath("$.missions[0].completed", is(false)));
 
     }
