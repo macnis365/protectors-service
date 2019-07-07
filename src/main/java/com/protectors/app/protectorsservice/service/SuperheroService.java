@@ -39,7 +39,6 @@ public class SuperheroService {
         superheroFromDatabase.setSuperheroName(userModifiedSuperhero.getSuperheroName());
     }
 
-    @Transactional
     public void deleteSuperhero(Long id) {
         Superhero superhero = superheroRepository.findById(id).orElseThrow(() -> new SuperheroNotFound(id));
         superhero.setMissions(null);
