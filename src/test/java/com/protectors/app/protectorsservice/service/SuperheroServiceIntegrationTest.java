@@ -22,9 +22,11 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/*
 @RunWith(SpringRunner.class)
+*/
 public class SuperheroServiceIntegrationTest {
-
+/*
     @TestConfiguration
     static class SuperheroServiceTestContextConfiguration {
 
@@ -103,6 +105,6 @@ public class SuperheroServiceIntegrationTest {
     @Test(expected = SuperheroNotFound.class)
     public void deleteNonExistSuperhero() {
         superheroService.deleteSuperhero(11L);
-    }
+    }*/
 
 }
