@@ -5,6 +5,7 @@ import cucumber.api.java8.En;
 import io.cucumber.datatable.DataTable;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.junit.Assert;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class MissionSteps extends AbstractSteps implements En {
             response.then()
                     .log()
                     .all();
+            Assert.assertEquals(201, response.getStatusCode());
         });
     }
 }
